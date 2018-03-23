@@ -43,9 +43,37 @@ function init() {
     console.log("initializing mats")
     materials = new Materials()
 
-    Loader('./assets/models/globe.obj', "globe")
-    Loader('./assets/models/countries.obj', "countries")
-    Loader('./assets/models/countryNames.obj', "countryNames")
+    initObjects()
+}
+
+function initObjects() {
+    ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", function(vert, frag) {
+        materials.initGlow(vert, frag)
+        ObjectLoader('./assets/models/countries.obj', function(obj) {
+            countries = obj.parent
+            countries.scale.multiplyScalar(20)
+            countries.children.forEach(function(child) {
+                var mat = materials.countryGlowMat.clone()
+                mat.uniforms.viewVector.value = camera.position
+                mat.uniforms.glowColor.value = materials.randomizeColor(materials.baseColor)
+                child.material = mat
+            })
+            scene.add(countries)
+        })
+        ObjectLoader('./assets/models/countryNames.obj', function(obj) {
+            countryNames = new THREE.Mesh(obj.geometry, materials.nameGlowMat)
+            countryNames.scale.multiplyScalar(20.075)
+            scene.add(countryNames)
+        })
+    })
+    ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
+        materials.initGlobe(vert, frag)
+        ObjectLoader('./assets/models/globe.obj', function(obj) {
+            globe = new THREE.Mesh(obj.geometry, materials.globeMat)
+            globe.scale.multiplyScalar(19)
+            //scene.add(globe)
+        })
+    })
 }
 
 function onWindowResize() {
@@ -59,7 +87,7 @@ function onWindowResize() {
 function render() {
     requestAnimationFrame( render );
     controls.update()
-    //camera.update()
+    materials.update()
     renderer.render( scene, camera );
 
     //materials.countryGlowMat.uniforms.viewVector.value = new THREE.Vector3().subVectors(camera.position, countries.position)
