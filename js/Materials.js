@@ -1,11 +1,14 @@
 
 Materials = function() {
 
-    var countryGlowMat = new THREE.ShaderMaterial( {
+    console.log("initializing mats")
+    console.log("camera position is: x:" + camera.position.x + ", y: " + camera.position.y + ", z: " + camera.position.z)
+
+    this.countryGlowMat = new THREE.ShaderMaterial( {
         uniforms:
             {
-                "c":		{ type: "f", value: 0.6 }, //0.28 - 0.6
-                "p":		{ type: "f", value: 6.0 }, //4.2  - 6.0
+                "c":		{ type: "f", value: 1 }, //0.28 - 0.6
+                "p":		{ type: "f", value: 1.4 }, //4.2  - 6.0
                 glowColor: 	{ type: "c", value: new THREE.Color(0x4eebb3) },
                 viewVector: { type: "v3", value: camera.position }
             },
@@ -16,7 +19,7 @@ Materials = function() {
         transparent: true
     })
 
-    var nameGlowMat = new THREE.ShaderMaterial( {
+    this.nameGlowMat = new THREE.ShaderMaterial( {
         uniforms:
             {
                 c: 			{ type: "f",  value: 0.8 },
@@ -30,10 +33,4 @@ Materials = function() {
         blending: THREE.SubtractiveBlending,
         transparent: true
     })
-
-    // globeshader: new THREE.MeshBasicMaterial({
-    //     shader: THREE.SmoothShading,
-    //     map: globetexture,
-    //     transparent: true
-    // })
 }

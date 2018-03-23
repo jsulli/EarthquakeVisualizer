@@ -7,7 +7,7 @@ var globe, countries, countryNames
 var materials
 
 init()
-animate()
+render()
 
 function init() {
 
@@ -18,10 +18,8 @@ function init() {
 
     scene = new THREE.Scene();
 
-    camera = new THREE.GlobeCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
     camera.position.z = 400;
-
-    materials = new Materials()
 
     //Camera controls
     controls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -40,15 +38,14 @@ function init() {
     point.position.y = 300
     scene.add(point)
 
-    var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
-
-    mesh = new THREE.Mesh( geometry, material );
-    //scene.add( mesh );
-
-    material.needsUpdate = true
-
     window.addEventListener( 'resize', onWindowResize, false );
+
+    console.log("initializing mats")
+    materials = new Materials()
+
+    Loader('./assets/models/globe.obj', "globe")
+    Loader('./assets/models/countries.obj', "countries")
+    Loader('./assets/models/countryNames.obj', "countryNames")
 }
 
 function onWindowResize() {
@@ -59,9 +56,12 @@ function onWindowResize() {
 
 
 
-function animate() {
+function render() {
+    requestAnimationFrame( render );
     controls.update()
-    camera.update()
-    requestAnimationFrame( animate );
+    //camera.update()
     renderer.render( scene, camera );
+
+    //materials.countryGlowMat.uniforms.viewVector.value = new THREE.Vector3().subVectors(camera.position, countries.position)
+    //materials.nameGlowMat.uniforms.viewVector.value = new THREE.Vector3().subVectors(camera.position, countryNames.position)
 }
