@@ -1,96 +1,67 @@
-import * as THREE from '../dependencies/three/three.module.js'
-import OrbitControls from '../dependencies/three/controls/OrbitControls.js'
-import { GlobeCamera } from './camera.js'
 
-let container, stats
-let camera, controls, projector
-let scene, renderer, light
-let mouseX, mouseY
-let fog
-let globe
+var camera, controls, projector
+var scene, renderer, light
+var mouseX, mouseY
+var fog
+var globe, countries, countryNames
+var materials
 
 init()
 animate()
 
 function init() {
-    container = document.getElementById("container")
 
-    scene = new THREE.Scene()
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
 
-    renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, logarithmicDepthBuffer: true })
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.autoClear = false
-    renderer.sortObjects = true
-    container.appendChild(renderer.domElement)
+    scene = new THREE.Scene();
 
-    camera = new GlobeCamera(15, window.innerWidth, window.innerHeight, 50, 100000)
-    camera.position.z = -350 * camera.scaleFactor
-    scene.add(camera)
+    camera = new THREE.GlobeCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+    camera.position.z = 400;
 
-    controls = new OrbitControls(camera, renderer.domElement)
-    controls.rotateSpeed = 0.07
-    controls.zoomSpeed = 1.0
-    controls.panSpeed = 0.1
-    controls.noRoll = true
-    controls.staticMoving = false
-    controls.dynamicDampingFactor = 0.5
+    materials = new Materials()
+
+    //Camera controls
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
+    controls.rotateSpeed = 0.25;
+    controls.zoomSpeed = 0.1;
+    controls.panSpeed = 0.1;
+    controls.noRoll = true;
+    controls.staticMoving = false;
+    controls.dynamicDampingFactor = 0.075;
     camera.controls = controls
 
-    projector = new THREE.Projector()
+    var ambient = new THREE.AmbientLight(0xdddddd, 0.4)
+    scene.add(ambient)
 
-    light = new THREE.AmbientLight(0xffffff)
-    scene.add(light)
+    var point = new THREE.PointLight(0xcc33ff)
+    point.position.y = 300
+    scene.add(point)
 
-    fog = new THREE.Fog('#003834', 50, 100)
-    scene.fog = fog
+    var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
 
-    renderer.domElement.addEventListener('mousedown', onMouseDown, false);
-    renderer.domElement.addEventListener('mouseup', onMouseUp, false);
-    window.addEventListener('resize', onWindowResize, false);
-}
+    mesh = new THREE.Mesh( geometry, material );
+    //scene.add( mesh );
 
+    material.needsUpdate = true
 
-function onMouseDown(event) {
-    event.preventDefault()
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-}
-
-function onMouseUp(event) {
-    event.preventDefault()
-    let vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5)
-    projector.unprojectVector(vector, camera)
-    let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize())
-    let intersects = raycaster.intersectObject(globe)
-
-    if(intersects.length > 0 && mouseX === event.clientX && mouseY === event.clientY) {
-        let pos = intersects[0].point
-        findQuakes() // TODO
-        camera.idle = false
-    }
+    window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth / window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
+
+
 
 function animate() {
-    requestAnimationFrame(animate)
-    render()
-    TWEEN.update()
     controls.update()
     camera.update()
-
-    // do some quake animation stuff here
-}
-
-function render() {
-    let dist = camera.position.distanceTo(new THREE.Vector3())
-
-    fog.near = dist-35
-    fog.far = dist-2
-
-    renderer.render(scene, camera)
+    requestAnimationFrame( animate );
+    renderer.render( scene, camera );
 }
