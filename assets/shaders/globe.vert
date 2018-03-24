@@ -209,6 +209,6 @@ void main() {
     vReflect = reflect(I, worldNormal);
     vReflectionFactor = mFresnelBias + mFresnelScale * pow(1.0 + dot(normalize(I), worldNormal),mFresnelPower);
 
-    vec3 newPosition = position + normal * (displacement * 0.25);
+    vec3 newPosition = position + normal * (displacement * 0.18);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
 }

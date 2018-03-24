@@ -6,6 +6,7 @@ var mouseX, mouseY
 var fog
 var glowSphere
 var globe, countries, countryNames
+var gpsSurface
 var materials
 
 init()
@@ -21,11 +22,10 @@ function init() {
     scene = new THREE.Scene();
     sceneSky = new THREE.Scene()
 
-    fog = new THREE.Fog(0x003031, 120, 150)
+    fog = new THREE.Fog(0x013330, 50, 160)
     scene.fog = fog
 
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 2000 );
-    //camera.position.z = 200;
     camera.position.x = 240;
 
     //Camera controls
@@ -34,8 +34,8 @@ function init() {
     controls.zoomSpeed = 1;
     controls.panSpeed = 0.1;
     controls.noRoll = true;
-    controls.staticMoving = false;
-    controls.dynamicDampingFactor = 0.05;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
     camera.controls = controls
 
     var ambient = new THREE.AmbientLight(0xdddddd, 0.4)
@@ -52,6 +52,9 @@ function init() {
 
     initObjects()
     initSky()
+    initGPS()
+
+    Quakes("./assets/quakes.json")
 }
 
 function initSky() {
@@ -84,15 +87,22 @@ function initObjects() {
     })
     ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
         materials.initGlobe(vert, frag)
-        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(148.5, 6), materials.globeMat)
+        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(148.7, 6), materials.globeMat)
         scene.add(globe)
     })
     var obj = new THREE.SphereBufferGeometry(200, 70, 50)
     glowSphere = new THREE.Mesh(obj, materials.outerGlowMat)
     //scene.add(glowSphere)
 
-    //var cube = new THREE.Mesh(new THREE.BoxBufferGeometry(100, 100, 100, 1, 1, 1), new THREE.MeshBasicMaterial())
-    //scene.add(cube)
+}
+
+function initGPS() {
+    var globeshader = new THREE.MeshBasicMaterial();
+    var obj = new THREE.SphereBufferGeometry(150, 50, 50)
+    gpsSurface = new THREE.GeoSpatialMap(obj, globeshader)
+    gpsSurface.setTexturesEdgeLongitude(-260.0);
+    gpsSurface.setRadius(150)
+    //scene.add(gpsSurface)
 }
 
 function onWindowResize() {
@@ -105,6 +115,13 @@ function onWindowResize() {
 
 function render() {
     requestAnimationFrame( render )
+
+    //update fog distances
+    var dist = camera.position.distanceTo(gpsSurface.position)
+    fog.near = dist-(170)
+    fog.far = dist-(60)
+
+
     controls.update()
     materials.update()
     renderer.render(sceneSky, camera)
