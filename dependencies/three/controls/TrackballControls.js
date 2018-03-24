@@ -179,7 +179,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 				quaternion.setFromAxisAngle( axis, angle );
 
 				_eye.applyQuaternion( quaternion );
-				_this.object.up.applyQuaternion( quaternion );
+				//_this.object.up.applyQuaternion( quaternion );
 
 				_lastAxis.copy( axis );
 				_lastAngle = angle;
@@ -190,11 +190,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 				_eye.copy( _this.object.position ).sub( _this.target );
 				quaternion.setFromAxisAngle( _lastAxis, _lastAngle );
 				_eye.applyQuaternion( quaternion );
-				_this.object.up.applyQuaternion( quaternion );
+				//_this.object.up.applyQuaternion( quaternion );
 
 			}
 
 			_movePrev.copy( _moveCurr );
+			//_this.object.up.set(0,1,0)
 
 		};
 
@@ -469,7 +470,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	function mousewheel( event ) {
 
 		if ( _this.enabled === false ) return;
-		
+
 		if ( _this.noZoom === true ) return;
 
 		event.preventDefault();
