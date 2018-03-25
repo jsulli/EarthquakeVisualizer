@@ -18,11 +18,7 @@ function Quakes(path) {
             _this.markAll()
         })
         ObjectLoader('./assets/models/ping.obj', function(obj) {
-            _this.ping = new THREE.Mesh(obj.geometry, new THREE.MeshBasicMaterial({
-                color: 0xff1509,
-                transparent: true,
-                opacity: 0.7
-            }))
+            _this.ping = new THREE.Mesh(obj.geometry, materials.pingMat)
             _this.ping.scale.multiplyScalar(10)
             _this.ping.visible = false
             scene.add(_this.ping)
