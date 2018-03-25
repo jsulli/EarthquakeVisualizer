@@ -55,7 +55,7 @@ function init() {
     initSky()
     initGPS()
 
-    quakes = new Quakes("./assets/quakes.json")
+    quakes = new Quakes("./assets/quakes_test.json")
 }
 
 function initSky() {

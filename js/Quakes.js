@@ -1,6 +1,7 @@
 
 function Quakes(path) {
     var _this = this
+    this.markers = []
 
     // load json
     $.getJSON(path, function(json) {
@@ -9,11 +10,13 @@ function Quakes(path) {
 
     this.init = function(data) {
         this.data = data
-        var geo = new THREE.CylinderBufferGeometry(0.2, 1, 10, 10, 2)
-        this.markerObj = new THREE.Mesh(geo, new THREE.MeshBasicMaterial())
-
-        //this.createMarker(this.data.features[12])
-        this.markAll()
+        ObjectLoader('./assets/models/pin.obj', function(obj) {
+            _this.markerObj = new THREE.Mesh(obj.geometry, new THREE.MeshBasicMaterial())
+            _this.markerObj.scale.x = 35
+            _this.markerObj.scale.y = 35
+            _this.markerObj.scale.z = 12
+            _this.markAll()
+        })
     }
 
 
@@ -32,10 +35,18 @@ function Quakes(path) {
             })
         )
         marker.lookAt(gpsSurface.position)
-        marker.translateZ(-5)
-        marker.rotateX(90 * (Math.PI / 180))
-        marker.scale.multiplyScalar(0.6)
-        marker.scale.multiplyScalar(Math.log(quake.properties.mag))
+        marker.translateZ(2)
+        //marker.rotateX(90 * (Math.PI / 180))
+        marker.scale.multiplyScalar(0.003)
+        marker.scale.multiplyScalar(Math.pow(quake.properties.mag, 3))
+        this.markers.push(marker)
         scene.add(marker)
+    }
+
+    this.clearMarkers = function() {
+        this.markers.forEach(function(marker) {
+            scene.remove(marker)
+        })
+        this.markers = []
     }
 }
