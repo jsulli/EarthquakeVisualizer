@@ -72,9 +72,10 @@ function initObjects() {
             countries = obj.parent
             countries.scale.multiplyScalar(20)
             countries.children.forEach(function(child) {
-                var mat = materials.countryGlowMat.clone()
-                mat.uniforms.viewVector.value = camera.position
-                mat.uniforms.glowColor.value = materials.randomizeColor(materials.baseColor)
+                var mat = materials.countryMat.clone()
+                //mat.uniforms.viewVector.value = camera.position
+                //mat.uniforms.glowColor.value = materials.randomizeColor(materials.baseColor)
+                mat.color = materials.randomizeColor(new THREE.Color(0x5bdec6))
                 child.material = mat
             })
             scene.add(countries)

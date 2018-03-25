@@ -23,6 +23,10 @@ Materials = function() {
             fog: true
         })
 
+        this.countryMat = new THREE.MeshBasicMaterial({
+            color: this.baseColor
+        })
+
         this.nameGlowMat = new THREE.ShaderMaterial( {
             uniforms:
                 {

@@ -34,6 +34,8 @@ function Quakes(path) {
         marker.lookAt(gpsSurface.position)
         marker.translateZ(-5)
         marker.rotateX(90 * (Math.PI / 180))
+        marker.scale.multiplyScalar(0.6)
+        marker.scale.multiplyScalar(Math.log(quake.properties.mag))
         scene.add(marker)
     }
 }
