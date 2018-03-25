@@ -8,6 +8,7 @@ var glowSphere
 var globe, countries, countryNames
 var gpsSurface
 var materials
+var quakes
 
 init()
 render()
@@ -54,7 +55,7 @@ function init() {
     initSky()
     initGPS()
 
-    Quakes("./assets/quakes.json")
+    quakes = new Quakes("./assets/quakes.json")
 }
 
 function initSky() {
@@ -118,6 +119,8 @@ function render() {
 
     //update fog distances
     var dist = camera.position.distanceTo(gpsSurface.position)
+    camera.far = dist +2
+    camera.updateProjectionMatrix()
     fog.near = dist-(170)
     fog.far = dist-(60)
 

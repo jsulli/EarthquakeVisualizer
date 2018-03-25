@@ -1,30 +1,39 @@
-var data
 
 function Quakes(path) {
-    console.log("loading json")
+    var _this = this
+
+    // load json
     $.getJSON(path, function(json) {
-        console.log(json)
-        data = json
-        console.log("json loaded")
-
-
-        var cylinder = new THREE.CylinderBufferGeometry(0.2, 1, 10, 10, 2)
-        var obj = new THREE.Mesh(cylinder, new THREE.MeshBasicMaterial())
-
-        data.features.forEach(function(element) {
-            var obj = new THREE.Mesh(cylinder, new THREE.MeshBasicMaterial())
-            gpsSurface.addGeoSymbol(
-                new THREE.GeoSpatialMap.GeoSymbol(obj, {
-                    phi: element.geometry.coordinates[0],
-                    lambda: element.geometry.coordinates[1]
-                })
-            )
-            obj.lookAt(gpsSurface.position)
-            obj.translateZ(-5)
-            obj.rotateX(90 * (Math.PI / 180))
-
-            scene.add(obj)
-        })
-
+        _this.init(json)
     })
+
+    this.init = function(data) {
+        this.data = data
+        var geo = new THREE.CylinderBufferGeometry(0.2, 1, 10, 10, 2)
+        this.markerObj = new THREE.Mesh(geo, new THREE.MeshBasicMaterial())
+
+        //this.createMarker(this.data.features[12])
+        this.markAll()
+    }
+
+
+    this.markAll = function() {
+        this.data.features.forEach(function(quake) {
+            _this.createMarker(quake)
+        })
+    }
+
+    this.createMarker = function(quake) {
+        var marker = this.markerObj.clone()
+        gpsSurface.addGeoSymbol(
+            new THREE.GeoSpatialMap.GeoSymbol(marker, {
+                phi: quake.geometry.coordinates[1],
+                lambda: quake.geometry.coordinates[0]
+            })
+        )
+        marker.lookAt(gpsSurface.position)
+        marker.translateZ(-5)
+        marker.rotateX(90 * (Math.PI / 180))
+        scene.add(marker)
+    }
 }
