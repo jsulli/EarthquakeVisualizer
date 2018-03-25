@@ -18,9 +18,24 @@ html {
 
 
 body {
+    color: #808080;
+    font-size:13px;
+    text-align:center;
+    background-color: #fff;
     margin: 0;
-    background-color: #000000;
     overflow: hidden;
+}
+
+
+.sidebar {
+    width: 400px;
+    height: 100%;
+    position: absolute;
+    background: #ffffff;
+    opacity: 0.8;
+    padding: 12px;
+    top: 0;
+    left: 0;
 }
 
 /*

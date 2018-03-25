@@ -7,12 +7,28 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="dependencies/bootstrap/css/bootstrap.min.css">
     </head>
     <body>
 
+        <div id="container"></div>
+
+
+
+        <div class="sidebar">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Collapsible</button>
+            <h2>Simple Collapsible</h2>
+            <p>Click on the button to toggle between showing and hiding content</p>
+            <div id="demo" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+
+
         <!-- Add your site or application content here -->
         <!-- general dependencies -->
-        <script src="dependencies/jquery-3.2.1.min.js"></script>
+        <script src="./dependencies/jquery-3.2.1.min.js"></script>
+        <script src="./dependencies/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- three.js related dependencies -->
         <script src="./dependencies/three/three.js"></script>
@@ -27,12 +43,17 @@
         <script src="./dependencies/three/loaders/OBJLoader.js"></script>
 
         <!-- application code -->
-        <script src="js/GlobeCamera.js"></script>
-        <script src="js/ShaderLoader.js"></script>
-        <script src="js/Materials.js"></script>
-        <script src="js/Loader.js"></script>
-        <script src="js/Quakes.js"></script>
-        <script src="js/main.js"></script>
+        <script src="./js/GlobeCamera.js"></script>
+        <script src="./js/Util.js"></script>
+        <script src="./js/ShaderLoader.js"></script>
+        <script src="./js/Materials.js"></script>
+        <script src="./js/Loader.js"></script>
+        <script src="./js/Quakes.js"></script>
+        <script src="./js/main.js"></script>
+
+
+
+
 
 
     </body>

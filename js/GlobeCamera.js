@@ -1,37 +1,40 @@
 
+
+
+
 THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
 
     THREE.PerspectiveCamera.call(this, focalLength, width, height, clipMin, clipMax)
 
-    var controls = 0
-    var scaleFactor = 34
-    var rotSpeed = new THREE.Vector2(-25.00, -5.00)
-    var origin = new THREE.Vector3()
-    var idle = true
+    this.controls = 0
+    this.scaleFactor = 34
+    this.rotSpeed = new THREE.Vector2(-25.00, -5.00)
+    this.idle = true
 
 
     this.update = function() {
         if(this.idle) {
-            var x = position.x,
-                y = position.y,
-                z = position.z,
-                tx = this.controls.target.x,
-                ty = this.controls.target.y,
-                tz = this.controls.target.z
+            var x = this.position.x,
+                y = this.position.y,
+                z = this.position.z,
+                tx = controls.target.x,
+                ty = controls.target.y,
+                tz = controls.target.z
 
             var theta = new THREE.Vector2(this.rotSpeed.x / 100000, -this.rotSpeed.y / 100000)
 
-            position.x = x * Math.cos(theta.x) + z * Math.sin(theta.x) - y * Math.sin(theta.y);
-            position.y = y * Math.cos(theta.x) + z * Math.sin(theta.y) + x * Math.sin(theta.y);
-            position.z = z * Math.cos(theta.x) - x * Math.sin(theta.x) - y * Math.sin(theta.y);
+            this.position.x = x * Math.cos(theta.x) + z * Math.sin(theta.x) - y * Math.sin(theta.y);
+            this.position.y = y * Math.cos(theta.x) + z * Math.sin(theta.y) + x * Math.sin(theta.y);
+            this.position.z = z * Math.cos(theta.x) - x * Math.sin(theta.x) - y * Math.sin(theta.y);
 
-            this.controls.target.x = tx * Math.cos(theta.x) + tz * Math.sin(theta.x) - ty * Math.sin(theta.y);
-            this.controls.target.y = ty * Math.cos(theta.x) + tz * Math.sin(theta.y) + tx * Math.sin(theta.y);
-            this.controls.target.z = tz * Math.cos(theta.x) - tx * Math.sin(theta.x) - ty * Math.sin(theta.y);
+            controls.target.x = tx * Math.cos(theta.x) + tz * Math.sin(theta.x) - ty * Math.sin(theta.y);
+            controls.target.y = ty * Math.cos(theta.x) + tz * Math.sin(theta.y) + tx * Math.sin(theta.y);
+            controls.target.z = tz * Math.cos(theta.x) - tx * Math.sin(theta.x) - ty * Math.sin(theta.y);
         }
     }
 
     this.setIdleSpeed = function(x, y) {
+        var _this = this
         if(y === undefined) y = x/7
         new TWEEN.Tween(this.rotSpeed)
             .to({
@@ -39,12 +42,79 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
                 y: y}, 3500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(function() {
-                this.rotSpeed.set(this.x, this.y)
+                _this.rotSpeed.set(this.x, this.y)
             })
             .start()
     }
 
-    this.zoom = function(amount, speed) {
+
+    this.testTween = function() {
+        var p = {x: 0.00}
+        var cameraTween = new TWEEN.Tween(p)
+            .to({x: 1.00}, 1000)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function() {
+                console.log("test")
+            }).start()
+    }
+
+    this.moveToTarget = function(pos) {
+        this.idle = false
+
+        var height = 50
+
+        var handle1 = new THREE.Object3D
+        var handle2 = new THREE.Object3D
+        var start = new THREE.Object3D
+        var end = new THREE.Object3D
+
+        start.position.set(this.position.x, this.position.y, this.position.z)
+        end.position.set(pos.x, pos.y, pos.z)
+
+        start.lookAt(origin)
+        end.lookAt(origin)
+
+        end.translateZ(height* -1)
+
+        handle1.position.set(start.position.x, start.position.y, start.position.z)
+        handle2.position.set(end.position.x, end.position.y, end.position.z)
+
+        Util.lookAtAndOrient(handle1, origin, end)
+        Util.lookAtAndOrient(handle2, origin, start)
+
+        var angle = Util.findAngle(start.position, origin, end.position)
+        angle = angle * 60
+        handle1.translateX(angle)
+        handle2.translateX(angle)
+
+        var curve = new THREE.CubicBezierCurve3(
+            start.position,
+            handle1.position,
+            handle2.position,
+            end.position)
+
+        var time = start.position.distanceTo(end.position) * 12
+        if(time < 3000) time = 3000
+        if(time > 6000) time = 6000
+
+        var _this = this
+
+        console.log("time is " + time)
+        this.cameraTween = new TWEEN.Tween({x:0.00})
+            .to({x: 1.00}, time)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function() {
+                var point = curve.getPointAt(this.x)
+                _this.position.x = point.x
+                _this.position.y = point.y
+                _this.position.z = point.z
+            }).start()
+
+        quakes.setPing(pos)
+    }
+
+
+    /*this.zoom = function(amount, speed) {
         if(speed === undefined) speed = 1500
         var last = 0
         var cam = this
@@ -66,8 +136,8 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
                 last = this.x
             })
             .start()
-    }
+    }*/
 }
-
 THREE.GlobeCamera.prototype = Object.create( THREE.PerspectiveCamera.prototype );
 THREE.GlobeCamera.prototype.constructor = THREE.GlobeCamera;
+

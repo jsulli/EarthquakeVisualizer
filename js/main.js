@@ -1,4 +1,5 @@
 
+var container
 var camera, controls, projector
 var scene, sceneSky
 var renderer, light
@@ -9,16 +10,19 @@ var globe, countries, countryNames
 var gpsSurface
 var materials
 var quakes
+var origin = new THREE.Vector3()
 
 init()
 render()
 
 function init() {
 
+    container = document.getElementById('container')
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    container.appendChild( renderer.domElement );
+    container.style.zIndex = 10
 
     scene = new THREE.Scene();
     sceneSky = new THREE.Scene()
@@ -26,7 +30,7 @@ function init() {
     fog = new THREE.Fog(0x013330, 50, 160)
     scene.fog = fog
 
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 2000 );
+    camera = new THREE.GlobeCamera( 70, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.position.x = 240;
 
     //Camera controls
@@ -41,10 +45,6 @@ function init() {
 
     var ambient = new THREE.AmbientLight(0xdddddd, 0.4)
     scene.add(ambient)
-
-    var point = new THREE.PointLight(0xcc33ff)
-    point.position.y = 300
-    scene.add(point)
 
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -86,7 +86,7 @@ function initObjects() {
     })
     ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
         materials.initGlobe(vert, frag)
-        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(148.7, 6), materials.globeMat)
+        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(149, 6), materials.globeMat)
         scene.add(globe)
     })
 }
@@ -107,10 +107,12 @@ function onWindowResize() {
 
 function render() {
     requestAnimationFrame( render )
+    TWEEN.update()
 
     //update fog distances
+    camera.update()
     var dist = camera.position.distanceTo(gpsSurface.position)
-    camera.far = dist
+    camera.far = dist - 15
     camera.updateProjectionMatrix()
     fog.near = dist-(170)
     fog.far = dist-(60)

@@ -14,6 +14,7 @@ THREE.GeoSpatialMap.GeoSymbol = function (object, coordinates) {
 };
 
 THREE.GeoSpatialMap.prototype = Object.create(THREE.Mesh.prototype)
+THREE.GeoSpatialMap.prototype.constructor = THREE.GeoSpatialMap;
 
 
 THREE.GeoSpatialMap.prototype.setTexturesEdgeLongitude = function (texture_edge_longitude) {
@@ -76,4 +77,4 @@ THREE.GeoSpatialMap.prototype.coordinatesToVector3 = function (radianCoordinates
     return vector;
 };
 
-THREE.GeoSpatialMap.prototype.constructor = THREE.GeoSpatialMap;
+
