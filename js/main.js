@@ -48,7 +48,6 @@ function init() {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    console.log("initializing mats")
     materials = new Materials()
 
     initObjects()
@@ -73,8 +72,6 @@ function initObjects() {
             countries.scale.multiplyScalar(20)
             countries.children.forEach(function(child) {
                 var mat = materials.countryMat.clone()
-                //mat.uniforms.viewVector.value = camera.position
-                //mat.uniforms.glowColor.value = materials.randomizeColor(materials.baseColor)
                 mat.color = materials.randomizeColor(new THREE.Color(0x5bdec6))
                 child.material = mat
             })
@@ -92,10 +89,6 @@ function initObjects() {
         globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(148.7, 6), materials.globeMat)
         scene.add(globe)
     })
-    var obj = new THREE.SphereBufferGeometry(200, 70, 50)
-    glowSphere = new THREE.Mesh(obj, materials.outerGlowMat)
-    //scene.add(glowSphere)
-
 }
 
 function initGPS() {
@@ -104,7 +97,6 @@ function initGPS() {
     gpsSurface = new THREE.GeoSpatialMap(obj, globeshader)
     gpsSurface.setTexturesEdgeLongitude(-260.0);
     gpsSurface.setRadius(150)
-    //scene.add(gpsSurface)
 }
 
 function onWindowResize() {
@@ -113,18 +105,15 @@ function onWindowResize() {
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-
-
 function render() {
     requestAnimationFrame( render )
 
     //update fog distances
     var dist = camera.position.distanceTo(gpsSurface.position)
-    camera.far = dist +2
+    camera.far = dist
     camera.updateProjectionMatrix()
     fog.near = dist-(170)
     fog.far = dist-(60)
-
 
     controls.update()
     materials.update()

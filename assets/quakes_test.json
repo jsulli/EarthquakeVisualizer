@@ -12,7 +12,7 @@
         {
             "type":"Feature",
             "properties":{
-                "mag":10,
+                "mag":6,
                 "place":"256km SE of Lambasa, Fiji",
                 "time":1521832082460,
                 "updated":1521832866040,
