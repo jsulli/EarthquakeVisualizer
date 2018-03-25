@@ -1,9 +1,9 @@
 
 var container
-var camera, controls, projector
+var camera, controls
 var scene, sceneSky
 var renderer, light
-var mouseX, mouseY
+var downX, downY
 var fog
 var glowSphere
 var globe, countries, countryNames
@@ -46,7 +46,9 @@ function init() {
     var ambient = new THREE.AmbientLight(0xdddddd, 0.4)
     scene.add(ambient)
 
-    window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener( 'resize', onWindowResize, false )
+    window.addEventListener( 'mousedown', onMouseDown, false)
+    window.addEventListener( 'mouseup', onMouseUp, false)
 
     materials = new Materials()
 
@@ -103,6 +105,28 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onMouseDown(event) {
+    event.preventDefault()
+    downX = event.clientX
+    downY = event.clientY
+}
+
+function onMouseUp() {
+    event.preventDefault()
+    var upX = event.clientX
+    var upY = event.clientY
+    if(Math.abs(downX - upX) < 30 && Math.abs(downY - upY) < 30) {
+        var vector = new THREE.Vector3((upX / window.innerWidth) * 2 - 1, -(upY / window.innerHeight) * 2 + 1, 1.0)
+        vector.unproject(camera)
+        var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize())
+        var intersects = raycaster.intersectObject(globe)
+        if(intersects.length > 0) {
+            var pos = intersects[0].point
+            quakes.findNearest(pos)
+        }
+    }
 }
 
 function render() {

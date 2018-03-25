@@ -36,6 +36,23 @@ function Quakes(path) {
     }
 
 
+    this.findNearest = function(pos) {
+        var dist = 1000
+        var target
+        for(var i = 0; i < this.markers.length; i++) {
+            var cur = this.markers[i].position.distanceTo(pos)
+            if(cur < dist) {
+                dist = cur
+                target = this.markers[i].position
+            }
+        }
+        if(dist < 20) {
+            camera.moveToTarget(target)
+            this.setPing(target)
+        }
+    }
+
+
     this.markAll = function() {
         this.data.features.forEach(function(quake) {
             _this.createMarker(quake)
