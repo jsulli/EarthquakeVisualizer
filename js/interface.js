@@ -16,11 +16,9 @@ function QuakeList(json) {
     this.buildQuakeInfo = function(quake) {
         var info = ""
 
-        var epoch = Math.floor(quake.time / 1e3)
-        console.log(epoch)
         var timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}
         var date = new Date(0)
-        date.setUTCSeconds(epoch)
+        date.setUTCMilliseconds(quake.time)
         var dateFormat = date.toLocaleDateString("en-US", timeOptions)
         info += "Location: " + quake.place + "\n"
         info += "Time: " + dateFormat + "\n"

@@ -93,13 +93,12 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
             handle2.position,
             end.position)
 
-        var time = start.position.distanceTo(end.position) * 12
+        var time = start.position.distanceTo(end.position) * 8
         if(time < 2000) time = 2000
         if(time > 6000) time = 6000
 
         var _this = this
 
-        console.log("time is " + time)
         this.cameraTween = new TWEEN.Tween({x:0.00})
             .to({x: 1.00}, time)
             .easing(TWEEN.Easing.Quadratic.InOut)
