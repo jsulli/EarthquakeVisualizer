@@ -62,6 +62,7 @@ function QuakeList() {
             content.innerHTML = this.buildQuakeInfo(json[i])
             document.getElementById('quake-list').appendChild(clone)
         }
+        $('#sidebar').removeClass('sidebar-closed')
     }
 
     this.buildQuakeInfo = function(quake) {
@@ -104,9 +105,6 @@ function QuakeList() {
 
         return info
     }
-
-
-
 
 
     this.activateIndex = function(index) {

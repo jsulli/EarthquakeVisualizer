@@ -61,7 +61,7 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
     this.moveToTarget = function(pos) {
         this.idle = false
 
-        var height = 70
+        var height = 55
 
         var handle1 = new THREE.Object3D
         var handle2 = new THREE.Object3D

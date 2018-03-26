@@ -1,6 +1,6 @@
 
 
-#sidebar {
+.sidebar {
     width: 400px;
     height: 100%;
     position: absolute;
@@ -10,7 +10,17 @@
     top: 0;
     left: 0;
     overflow: scroll;
-    overflow-x: hidden
+    overflow-x: hidden;
+    -webkit-transition: all 1.2s ease-in;
+       -moz-transition: all 1.2s ease-in;
+        -ms-transition: all 1.2s ease-in;
+         -o-transition: all 1.2s ease-in;
+            transition: all 1.2s ease-in;
+    transition-delay: 2s;
+}
+
+.sidebar-closed {
+    left: -100%;
 }
 
 .sort-container {
