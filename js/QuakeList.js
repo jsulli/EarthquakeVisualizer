@@ -18,14 +18,14 @@ function QuakeList(json) {
         var info = ""
         var escape = "\n"
 
-        // buildilng date
+        // build date
         var timeOptions = {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: 'numeric',
-            minute: 'numeric'}
+            minute: 'numeric' }
         var date = new Date(0)
         date.setUTCMilliseconds(props.time)
         var dateOffset = new Date(0)
@@ -43,7 +43,7 @@ function QuakeList(json) {
         info += "Magnitude: " + props.mag + escape
         info += "Intensity: " + props.cdi + escape
         info += "Tsunami: " + (props.tsunami ? "Yes" : "No") + escape
-        info += "USGS Link: " + escape
+        //info += "USGS Link: " + props.url + escape
         info += "Coordinates: " + quake.geometry.coordinates[1] + ", " + quake.geometry.coordinates[0] + escape
         info += "Felt: " + felt + escape
         info += "Significance: " + props.sig + escape
@@ -73,6 +73,23 @@ function QuakeList(json) {
         content.innerHTML = this.buildQuakeInfo(json[i])
         document.getElementById('quake-list').appendChild(clone)
     }
+
+    this.toggle = function() {
+
+    }
+
+    //set listeners for sort buttons
+    var sortTime = $('#sort-time')
+    sortTime.click(function() {
+        console.log("clicked time sort")
+        sortTime.addClass("active").siblings().removeClass("active");
+    })
+    var sortMag = $('#sort-mag')
+    sortMag.click(function() {
+        console.log("clicked mag sort")
+        sortMag.addClass("active").siblings().removeClass("active");
+    })
+
 
 
     this.activateIndex = function(index) {

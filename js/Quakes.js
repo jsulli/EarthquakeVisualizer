@@ -7,7 +7,8 @@ function Quakes(path) {
     // load json
     $.getJSON(path, function(json) {
         _this.init(json)
-        console.log("populating UI")
+        console.log("loading json")
+        console.log(json)
         quakeList = new QuakeList(json.features)
     })
 
