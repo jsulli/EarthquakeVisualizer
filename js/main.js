@@ -22,7 +22,6 @@ function init() {
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
-    container.style.zIndex = 10
 
     scene = new THREE.Scene();
     sceneSky = new THREE.Scene()
@@ -31,8 +30,8 @@ function init() {
     scene.fog = fog
 
     camera = new THREE.GlobeCamera( 70, window.innerWidth / window.innerHeight, 1, 2000 );
-    camera.position.x = 200
-    camera.position.y = 100
+    camera.position.x = 240
+    //camera.position.y = 100
 
     //Camera controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -62,8 +61,8 @@ function init() {
 
 
 function initObjects() {
-    ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", function(vert, frag) {
-        materials.initGlow(vert, frag)
+
+    materials.initGlow(function() {
         ObjectLoader('./assets/models/countries.obj', function(obj) {
             countries = obj.parent
             countries.scale.multiplyScalar(20)
@@ -79,12 +78,13 @@ function initObjects() {
             countryNames.scale.multiplyScalar(20.075)
             scene.add(countryNames)
         })
-
     })
-    ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
+
+
+    materials.initGlobe(function() {
         console.log("loaded globe shaders")
-        materials.initGlobe(vert, frag)
-        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(149, 6), materials.globeMat)
+        console.log(materials.globeMat)
+        globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(149, 5), materials.globeMat)
         scene.add(globe)
     })
 }

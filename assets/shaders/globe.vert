@@ -196,7 +196,7 @@ void main() {
 
     vec3 vNormal = normalize( normalMatrix * normal );
     vec3 vNormel = normalize( normalMatrix * viewVector );
-    intensity = pow( c - dot(vNormal, vNormel), p);
+    intensity = pow( abs(c - dot(vNormal, vNormel)), p);
 
 
     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
@@ -209,6 +209,6 @@ void main() {
     vReflect = reflect(I, worldNormal);
     vReflectionFactor = mFresnelBias + mFresnelScale * pow(1.0 + dot(normalize(I), worldNormal),mFresnelPower);
 
-    vec3 newPosition = position + normal * (displacement * 0.12);
+    vec3 newPosition = position + normal * (displacement * 0.13);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
 }

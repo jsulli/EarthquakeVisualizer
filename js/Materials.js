@@ -13,49 +13,57 @@ Materials = function() {
         color: this.baseColor
     })
 
-    this.initGlow = function(vert, frag) {
+    this.initGlow = function(callback) {
+        var _this = this
+        ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", function(vert, frag) {
 
-        this.nameGlowMat = new THREE.ShaderMaterial( {
-            uniforms:
-                {
-                    c: 			{ type: "f",  value: 1.3 },
-                    p: 			{ type: "f",  value: 1 },
-                    glowColor: 	{ type: "c",  value: new THREE.Color("#ffffff") },
-                    viewVector: { type: "v3", value: camera.position },
-                    fogColor:    { type: "c", value: scene.fog.color },
-                    fogNear:     { type: "f", value: scene.fog.near },
-                    fogFar:      { type: "f", value: scene.fog.far }
-                },
-            vertexShader: vert,
-            fragmentShader: frag,
-            side: THREE.FrontSide,
-            blending: THREE.SubtractiveBlending,
-            transparent: true,
-            fog: true
+            _this.nameGlowMat = new THREE.ShaderMaterial({
+                uniforms:
+                    {
+                        c: {type: "f", value: 1.3},
+                        p: {type: "f", value: 1},
+                        glowColor: {type: "c", value: new THREE.Color("#ffffff")},
+                        viewVector: {type: "v3", value: camera.position},
+                        fogColor: {type: "c", value: scene.fog.color},
+                        fogNear: {type: "f", value: scene.fog.near},
+                        fogFar: {type: "f", value: scene.fog.far}
+                    },
+                vertexShader: vert,
+                fragmentShader: frag,
+                side: THREE.FrontSide,
+                blending: THREE.SubtractiveBlending,
+                transparent: true,
+                fog: true
+            })
+            callback()
         })
     }
 
-    this.initGlobe = function(vert, frag) {
-        this.start = Date.now()
-        this.globeMat = new THREE.ShaderMaterial({
-            uniforms:
-                {
-                    c:              { type: "f", value: 0.05 },
-                    p:              { type: "f", value: 3.0 },
-                    time:           { type: "f", value: 0.0 },
-                    reflectivity:   { type: "f", value: 0.2 },
-                    glowColor:      { type: "c", value: new THREE.Color(0x279989)},
-                    viewVector:     { type: "v3", value: camera.position},
-                    fogColor:    { type: "c", value: scene.fog.color },
-                    fogNear:     { type: "f", value: scene.fog.near },
-                    fogFar:      { type: "f", value: scene.fog.far }
-                },
-            vertexShader: vert,
-            fragmentShader: frag,
-            side: THREE.FrontSide,
-            blending: THREE.AdditiveBlending,
-            transparent: true,
-            fog: true
+    this.initGlobe = function(callback) {
+        var _this = this
+        ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
+            _this.start = Date.now()
+            _this.globeMat = new THREE.ShaderMaterial({
+                uniforms:
+                    {
+                        c: {type: "f", value: 0.05},
+                        p: {type: "f", value: 3.0},
+                        time: {type: "f", value: 0.0},
+                        reflectivity: {type: "f", value: 0.2},
+                        glowColor: {type: "c", value: new THREE.Color(0x279989)},
+                        viewVector: {type: "v3", value: camera.position},
+                        fogColor: {type: "c", value: scene.fog.color},
+                        fogNear: {type: "f", value: scene.fog.near},
+                        fogFar: {type: "f", value: scene.fog.far}
+                    },
+                vertexShader: vert,
+                fragmentShader: frag,
+                side: THREE.FrontSide,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                fog: false
+            })
+            callback()
         })
     }
 
