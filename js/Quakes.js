@@ -9,7 +9,8 @@ function Quakes(path) {
         _this.init(json)
         console.log("loading json")
         console.log(json)
-        quakeList = new QuakeList(json.features)
+        quakeList = new QuakeList()
+        quakeList.init()
     })
 
     this.init = function(data) {
@@ -19,13 +20,37 @@ function Quakes(path) {
             _this.markerObj.scale.x = 35
             _this.markerObj.scale.y = 35
             _this.markerObj.scale.z = 12
-            _this.markAll()
+            _this.buildList()
         })
         ObjectLoader('./assets/models/ping.obj', function(obj) {
             _this.ping = new THREE.Mesh(obj.geometry, materials.pingMat)
             _this.ping.scale.multiplyScalar(10)
             _this.ping.visible = false
             scene.add(_this.ping)
+        })
+    }
+
+
+    this.clearQuakes = function() {
+        this.markers.forEach(function(marker) {
+            scene.remove(marker)
+        })
+        quakeList.clearList()
+        this.markers = []
+        this.quakes = []
+    }
+
+    this.sortByTime = function() {
+        console.log("starting sort by time")
+        this.data.features.sort(function(a, b) {
+            return parseInt(a.properties.time) - parseFloat(b.properties.time)
+        })
+    }
+
+    this.sortByMagnitude = function() {
+        console.log("starting sort by magnitude")
+        this.data.features.sort(function(a, b) {
+            return parseFloat(b.properties.mag) - parseFloat(a.properties.mag)
         })
     }
 
@@ -61,11 +86,12 @@ function Quakes(path) {
     }
 
 
-    this.markAll = function() {
+    this.buildList = function() {
         this.data.features.forEach(function(quake) {
             _this.createMarker(quake)
             _this.quakes.push(quake)
         })
+        quakeList.setData(this.data.features)
     }
 
     this.createMarker = function(quake) {
@@ -85,10 +111,6 @@ function Quakes(path) {
         scene.add(marker)
     }
 
-    this.clearMarkers = function() {
-        this.markers.forEach(function(marker) {
-            scene.remove(marker)
-        })
-        this.markers = []
-    }
+
 }
+Quakes.prototype.constructor = Quakes;
