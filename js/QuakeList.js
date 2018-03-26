@@ -14,14 +14,43 @@ function QuakeList(json) {
     }
 
     this.buildQuakeInfo = function(quake) {
+        var props = quake.properties
         var info = ""
+        var escape = "\n"
 
-        var timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}
+        // buildilng date
+        var timeOptions = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'}
         var date = new Date(0)
-        date.setUTCMilliseconds(quake.time)
+        date.setUTCMilliseconds(props.time)
+        var dateOffset = new Date(0)
+        dateOffset.setUTCMilliseconds(props.time + (props.tz * 60000))
+        var offsetFormat = dateOffset.toLocaleDateString("en-US", timeOptions)
         var dateFormat = date.toLocaleDateString("en-US", timeOptions)
-        info += "Location: " + quake.place + "\n"
-        info += "Time: " + dateFormat + "\n"
+
+        var felt
+        if(props.felt == null) felt = "No reports"
+        else felt = props.felt + " reports"
+
+        info += "Location: " + props.place + escape
+        info += "UTC Time: " + dateFormat + escape
+        info += "Local Time: " + offsetFormat + escape
+        info += "Magnitude: " + props.mag + escape
+        info += "Intensity: " + props.cdi + escape
+        info += "Tsunami: " + (props.tsunami ? "Yes" : "No") + escape
+        info += "USGS Link: " + escape
+        info += "Coordinates: " + quake.geometry.coordinates[1] + ", " + quake.geometry.coordinates[0] + escape
+        info += "Felt: " + felt + escape
+        info += "Significance: " + props.sig + escape
+        info += "DMin: " + props.dmin + escape
+        info += "RMS: " + props.rms + escape
+        info += "Gap: " + props.gap + " degrees" + escape
+
         return info
     }
 
@@ -41,7 +70,7 @@ function QuakeList(json) {
         body.id = "quakeCollapse" + i
         var content = clone.querySelector('#quake-content-base')
         content.id = "quake" + i + "-content"
-        content.innerHTML = this.buildQuakeInfo(quake)
+        content.innerHTML = this.buildQuakeInfo(json[i])
         document.getElementById('quake-list').appendChild(clone)
     }
 

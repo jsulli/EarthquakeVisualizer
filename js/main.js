@@ -31,7 +31,8 @@ function init() {
     scene.fog = fog
 
     camera = new THREE.GlobeCamera( 70, window.innerWidth / window.innerHeight, 1, 2000 );
-    camera.position.x = 240;
+    camera.position.x = 200
+    camera.position.y = 100
 
     //Camera controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -59,12 +60,6 @@ function init() {
     quakes = new Quakes("./assets/quakes_test.json")
 }
 
-function initSky() {
-    var p = "./assets/textures/sky/"
-    var images = ["xpos.png", "xneg.png","ypos.png","yneg.png","zpos.png","zneg.png"]
-    sceneSky.background = new THREE.CubeTextureLoader().setPath(p).load(images)
-}
-
 
 function initObjects() {
     ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", function(vert, frag) {
@@ -87,10 +82,17 @@ function initObjects() {
 
     })
     ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
+        console.log("loaded globe shaders")
         materials.initGlobe(vert, frag)
         globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(149, 6), materials.globeMat)
         scene.add(globe)
     })
+}
+
+function initSky() {
+    var p = "./assets/textures/sky/"
+    var images = ["xpos.png", "xneg.png","ypos.png","yneg.png","zpos.png","zneg.png"]
+    sceneSky.background = new THREE.CubeTextureLoader().setPath(p).load(images)
 }
 
 function initGPS() {
