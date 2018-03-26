@@ -47,8 +47,8 @@ function init() {
     scene.add(ambient)
 
     window.addEventListener( 'resize', onWindowResize, false )
-    window.addEventListener( 'mousedown', onMouseDown, false)
-    window.addEventListener( 'mouseup', onMouseUp, false)
+    renderer.domElement.addEventListener( 'mousedown', onMouseDown, false)
+    renderer.domElement.addEventListener( 'mouseup', onMouseUp, false)
 
     materials = new Materials()
 

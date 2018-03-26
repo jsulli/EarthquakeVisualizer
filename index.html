@@ -6,29 +6,47 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="dependencies/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+
+        <!-- general dependencies -->
+        <script src="./dependencies/jquery-3.2.1.min.js"></script>
+        <script src="./dependencies/bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
 
+
+
         <div id="container"></div>
 
+        <div class="card card-template" id="card-base">
+            <button id="header-button" type="button" class="btn btn-light quake-btn" data-toggle="collapse" data-target="#quake-base">
+                Collapsible Group Item #1
+            </button>
 
-
-        <div class="sidebar">
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Collapsible</button>
-            <h2>Simple Collapsible</h2>
-            <p>Click on the button to toggle between showing and hiding content</p>
-            <div id="demo" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <div id="quake-body-base" class="collapse" data-parent="#quake-list">
+                <div id="quake-content-base" class="card-body card-content">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
             </div>
         </div>
 
 
-        <!-- Add your site or application content here -->
-        <!-- general dependencies -->
-        <script src="./dependencies/jquery-3.2.1.min.js"></script>
-        <script src="./dependencies/bootstrap/js/bootstrap.min.js"></script>
+        <div class="sidebar-toggle"></div>
+        <div id="sidebar">
+
+            <h2>Earthquake Visualizer<br></h2>
+
+            <p>Data gathered from the United States Geological Survey to display earthquakes over the past week around the globe<br></p>
+            <h5>Recent quakes:<br></h5>
+            <div id="quake-list">
+            </div>
+        </div>
+
+
+
 
         <!-- three.js related dependencies -->
         <script src="./dependencies/three/three.js"></script>
@@ -49,6 +67,7 @@
         <script src="./js/Materials.js"></script>
         <script src="./js/Loader.js"></script>
         <script src="./js/Quakes.js"></script>
+        <script src="./js/interface.js"></script>
         <script src="./js/main.js"></script>
 
 

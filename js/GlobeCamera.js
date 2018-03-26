@@ -61,7 +61,7 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
     this.moveToTarget = function(pos) {
         this.idle = false
 
-        var height = 50
+        var height = 70
 
         var handle1 = new THREE.Object3D
         var handle2 = new THREE.Object3D
@@ -94,7 +94,7 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
             end.position)
 
         var time = start.position.distanceTo(end.position) * 12
-        if(time < 3000) time = 3000
+        if(time < 2000) time = 2000
         if(time > 6000) time = 6000
 
         var _this = this

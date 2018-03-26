@@ -2,10 +2,13 @@
 function Quakes(path) {
     var _this = this
     this.markers = []
+    this.quakes = []
 
     // load json
     $.getJSON(path, function(json) {
         _this.init(json)
+        console.log("populating UI")
+        quakeList = new QuakeList(json.features)
     })
 
     this.init = function(data) {
@@ -34,24 +37,33 @@ function Quakes(path) {
 
     this.findNearest = function(pos) {
         var dist = 1000
-        var target
+        var nearestIndex
         for(var i = 0; i < this.markers.length; i++) {
             var cur = this.markers[i].position.distanceTo(pos)
             if(cur < dist) {
                 dist = cur
-                target = this.markers[i].position
+                nearestIndex = i
             }
         }
-        if(dist < 20) {
+        if(dist < 7) {
+            var target = this.markers[nearestIndex].position
             camera.moveToTarget(target)
             this.setPing(target)
+            quakeList.activateIndex(nearestIndex)
         }
+    }
+
+    this.selectIndex = function(index) {
+        var target = this.markers[index].position
+        camera.moveToTarget(target)
+        this.setPing(target)
     }
 
 
     this.markAll = function() {
         this.data.features.forEach(function(quake) {
             _this.createMarker(quake)
+            _this.quakes.push(quake)
         })
     }
 
