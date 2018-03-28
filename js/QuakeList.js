@@ -1,22 +1,27 @@
 var quakeList
-console.log("creating UI")
 
 function QuakeList() {
 
     this.buttonList = []
 
+
     this.createClickListener = function(button, index) {
         this.buttonList.push(button)
         button.addEventListener("click", function() {
             console.log("clicked item with index " + index)
-            quakes.selectIndex(index)
+            quakeMarkers.selectIndex(index)
         })
     }
 
 
+    /*
+     * Initialize sorting buttons. Currently, to sort the list the entire list is deleted, including all corresponding
+     * markers on the globe, the json itself is sorted, then everything else is rebuilt from scratch.
+     * There is a lot of room to optimize this process by reordering things instead of rebuilding, but
+     * currently it can sort and build new UI elements and 3d markers in less than 16ms with a list of ~100 items
+     */
     this.init = function() {
 
-        //set listeners for sort buttons
         this.sortByTime = true
         var sortTime = $('#sort-time')
         var _this = this
@@ -25,9 +30,9 @@ function QuakeList() {
             if (!_this.sortByTime) {
                 _this.sortByTime = true
                 sortTime.addClass("active").siblings().removeClass("active")
-                quakes.clearQuakes()
-                quakes.sortByTime()
-                quakes.buildList()
+                quakeMarkers.clearQuakes()
+                quakeMarkers.sortByTime()
+                quakeMarkers.initMarkers()
             }
         })
         var sortMag = $('#sort-mag')
@@ -35,20 +40,29 @@ function QuakeList() {
             if (_this.sortByTime) {
                 _this.sortByTime = false
                 sortMag.addClass("active").siblings().removeClass("active")
-                quakes.clearQuakes()
-                quakes.sortByMagnitude()
-                quakes.buildList()
+                quakeMarkers.clearQuakes()
+                quakeMarkers.sortByMagnitude()
+                quakeMarkers.initMarkers()
             }
         })
     }
 
-    this.setData = function(json) {
-        for (var i = 0; i < json.length; i++) {
-            var quake = json[i].properties
+    /*
+     * Build list of earthquakes. Uses a template defined in index.hmtl, copies it, and changes necessary fields
+     */
+    this.initList = function() {
+
+        for (var i = 0; i < quakeData.getQuakes().length; i++) {
+
+            var quake = quakeData.getQuakes()[i].properties
+
+            // root element
             var card = document.getElementById('card-base'),
                 clone = card.cloneNode(true)
             clone.id = "quake" + i
             clone.style.display = "flex"
+
+            // button
             var button = clone.querySelector('#header-button')
             button.id = "quake" + i + "-button"
             button.setAttribute("data-target", "#quakeCollapse" + i)
@@ -57,63 +71,31 @@ function QuakeList() {
 
             var body = clone.querySelector('#quake-body-base')
             body.id = "quakeCollapse" + i
+
+            // inner content
             var content = clone.querySelector('#quake-content-base')
             content.id = "quake" + i + "-content"
-            content.innerHTML = this.buildQuakeInfo(json[i])
+            content.innerHTML = quakeData.buildQuakeDetails(i)
+
+            // add freshly built component to parent
             document.getElementById('quake-list').appendChild(clone)
         }
+
+        // open sidebar when complete to reduce jank
         $('#sidebar').removeClass('sidebar-closed')
     }
 
-    this.buildQuakeInfo = function(quake) {
-        var props = quake.properties
-        var info = ""
-        var escape = "\n"
-
-        // build date
-        var timeOptions = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-        }
-        var date = new Date(0)
-        date.setUTCMilliseconds(props.time)
-        var dateOffset = new Date(0)
-        dateOffset.setUTCMilliseconds(props.time + (props.tz * 60000))
-        var offsetFormat = dateOffset.toLocaleDateString("en-US", timeOptions)
-        var dateFormat = date.toLocaleDateString("en-US", timeOptions)
-
-        var felt
-        if (props.felt == null) felt = "No reports"
-        else felt = props.felt + " reports"
-
-        info += "Location: " + props.place + escape
-        info += "UTC Time: " + dateFormat + escape
-        info += "Local Time: " + offsetFormat + escape
-        info += "Magnitude: " + props.mag + escape
-        info += "Intensity: " + props.cdi + escape
-        info += "Tsunami: " + (props.tsunami ? "Yes" : "No") + escape
-        //info += "USGS Link: " + props.url + escape
-        info += "Coordinates: " + quake.geometry.coordinates[1] + ", " + quake.geometry.coordinates[0] + escape
-        info += "Felt: " + felt + escape
-        info += "Significance: " + props.sig + escape
-        info += "DMin: " + props.dmin + escape
-        info += "RMS: " + props.rms + escape
-        info += "Gap: " + props.gap + " degrees" + escape
-
-        return info
-    }
+    this.initList()
 
 
+    // Select item in list at index
     this.activateIndex = function(index) {
         this.buttonList[index].click()
         location.href = "#"
         location.href = "#" + this.buttonList[index].id
     }
 
+    // Wipe the list for rebuilding in a new sort
     this.clearList = function() {
         var container = document.getElementById('quake-list')
         while (container.firstChild) {

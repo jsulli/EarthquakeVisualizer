@@ -1,5 +1,4 @@
-function ObjLoader() {
-}
+function ObjLoader() {}
 
 ObjLoader.load = function(path, onLoad) {
     var loader = new THREE.OBJLoader()

@@ -8,7 +8,9 @@ var glowSphere
 var globe, countries, countryNames
 var gpsSurface
 var materials
-var quakes
+var quakeData
+var quakeList
+var quakeMarkers
 var origin = new THREE.Vector3()
 
 init()
@@ -55,7 +57,10 @@ function init() {
     initSky()
     initGPS()
 
-    quakes = new Quakes("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson")
+    quakeData = new QuakeData("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson", function() {
+        quakeList = new QuakeList()
+        quakeMarkers = new QuakeMarkers()
+    })
 }
 
 
@@ -79,10 +84,7 @@ function initObjects() {
         })
     })
 
-
     materials.initGlobe(function() {
-        console.log("loaded globe shaders")
-        console.log(materials.globeMat)
         globe = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(149, 5), materials.globeMat)
         scene.add(globe)
     })
@@ -125,7 +127,7 @@ function onMouseUp() {
         var intersects = raycaster.intersectObject(globe)
         if (intersects.length > 0) {
             var pos = intersects[0].point
-            quakes.findNearest(pos)
+            quakeMarkers.findNearest(pos)
         }
     }
 }

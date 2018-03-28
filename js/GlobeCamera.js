@@ -95,7 +95,27 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
                 _this.position.z = point.z
             }).start()
 
-        quakes.setPing(pos)
+        quakeMarkers.setPing(pos)
+    }
+
+    this.smoothZoom = function(amount, onComplete) {
+        onComplete = onComplete || function() {}
+        var speed = 3000
+        var dist = this.position.distanceTo(origin)
+        var last = 0
+
+        var _this = this
+        new TWEEN.Tween({z:0})
+            .to({z:amount}, speed)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function() {
+                _this.translateZ(this.z-last)
+                last = this.z
+            })
+            .onComplete(function() {
+                onComplete()
+            })
+            .start()
     }
 }
 
