@@ -1,4 +1,3 @@
-
 Materials = function() {
 
     this.baseColor = new THREE.Color(0x4eebb3)
@@ -77,9 +76,10 @@ Materials = function() {
     }
 
     this.update = function() {
-        if(this.globeMat === undefined) {return }
-        var dist = camera.position.distanceTo(origin);
-        this.globeMat.uniforms.time.value = 0.00003 * (Date.now() - this.start);
-        //this.globeMat.uniforms.reflectivity.value = Math.min(Math.max(dist/600, 0.01), 0.5)
+        if (this.globeMat === undefined) {
+            return
+        }
+        var dist = camera.position.distanceTo(origin)
+        this.globeMat.uniforms.time.value = 0.00003 * (Date.now() - this.start)
     }
 }

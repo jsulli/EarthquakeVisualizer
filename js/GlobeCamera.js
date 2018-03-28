@@ -1,7 +1,3 @@
-
-
-
-
 THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
 
     THREE.PerspectiveCamera.call(this, focalLength, width, height, clipMin, clipMax)
@@ -13,7 +9,7 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
 
 
     this.update = function() {
-        if(this.idle) {
+        if (this.idle) {
             var x = this.position.x,
                 y = this.position.y,
                 z = this.position.z,
@@ -23,39 +19,29 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
 
             var theta = new THREE.Vector2(this.rotSpeed.x / 100000, -this.rotSpeed.y / 100000)
 
-            this.position.x = x * Math.cos(theta.x) + z * Math.sin(theta.x) - y * Math.sin(theta.y);
-            this.position.y = y * Math.cos(theta.x) + z * Math.sin(theta.y) + x * Math.sin(theta.y);
-            this.position.z = z * Math.cos(theta.x) - x * Math.sin(theta.x) - y * Math.sin(theta.y);
+            this.position.x = x * Math.cos(theta.x) + z * Math.sin(theta.x) - y * Math.sin(theta.y)
+            this.position.y = y * Math.cos(theta.x) + z * Math.sin(theta.y) + x * Math.sin(theta.y)
+            this.position.z = z * Math.cos(theta.x) - x * Math.sin(theta.x) - y * Math.sin(theta.y)
 
-            controls.target.x = tx * Math.cos(theta.x) + tz * Math.sin(theta.x) - ty * Math.sin(theta.y);
-            controls.target.y = ty * Math.cos(theta.x) + tz * Math.sin(theta.y) + tx * Math.sin(theta.y);
-            controls.target.z = tz * Math.cos(theta.x) - tx * Math.sin(theta.x) - ty * Math.sin(theta.y);
+            controls.target.x = tx * Math.cos(theta.x) + tz * Math.sin(theta.x) - ty * Math.sin(theta.y)
+            controls.target.y = ty * Math.cos(theta.x) + tz * Math.sin(theta.y) + tx * Math.sin(theta.y)
+            controls.target.z = tz * Math.cos(theta.x) - tx * Math.sin(theta.x) - ty * Math.sin(theta.y)
         }
     }
 
     this.setIdleSpeed = function(x, y) {
         var _this = this
-        if(y === undefined) y = x/7
+        if (y === undefined) y = x / 7
         new TWEEN.Tween(this.rotSpeed)
             .to({
                 x: x,
-                y: y}, 3500)
+                y: y
+            }, 3500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(function() {
                 _this.rotSpeed.set(this.x, this.y)
             })
             .start()
-    }
-
-
-    this.testTween = function() {
-        var p = {x: 0.00}
-        var cameraTween = new TWEEN.Tween(p)
-            .to({x: 1.00}, 1000)
-            .easing(TWEEN.Easing.Quadratic.InOut)
-            .onUpdate(function() {
-                console.log("test")
-            }).start()
     }
 
     this.moveToTarget = function(pos) {
@@ -74,7 +60,7 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
         start.lookAt(origin)
         end.lookAt(origin)
 
-        end.translateZ(height* -1)
+        end.translateZ(height * -1)
 
         handle1.position.set(start.position.x, start.position.y, start.position.z)
         handle2.position.set(end.position.x, end.position.y, end.position.z)
@@ -94,12 +80,12 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
             end.position)
 
         var time = start.position.distanceTo(end.position) * 8
-        if(time < 2000) time = 2000
-        if(time > 6000) time = 6000
+        if (time < 2000) time = 2000
+        if (time > 6000) time = 6000
 
         var _this = this
 
-        this.cameraTween = new TWEEN.Tween({x:0.00})
+        this.cameraTween = new TWEEN.Tween({x: 0.00})
             .to({x: 1.00}, time)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(function() {
@@ -111,32 +97,8 @@ THREE.GlobeCamera = function(focalLength, width, height, clipMin, clipMax) {
 
         quakes.setPing(pos)
     }
-
-
-    /*this.zoom = function(amount, speed) {
-        if(speed === undefined) speed = 1500
-        var last = 0
-        var cam = this
-
-        if((position.distanceTo(origin) + amount) < 2700) {
-            amount = 2700 - position.distanceTo(origin)
-            if(amount > 0) return
-        }
-
-        if(position.distanceTo(origin) + amount > 22000) {
-            return
-        }
-
-        new TWEEN.Tween({x:0})
-            .to({x: amount}, speed)
-            .easing(TWEEN.Easing.Quadratic.InOut)
-            .onUpdate(function() {
-                cam.translateZ(this.x-last)
-                last = this.x
-            })
-            .start()
-    }*/
 }
-THREE.GlobeCamera.prototype = Object.create( THREE.PerspectiveCamera.prototype );
-THREE.GlobeCamera.prototype.constructor = THREE.GlobeCamera;
+
+THREE.GlobeCamera.prototype = Object.create(THREE.PerspectiveCamera.prototype)
+THREE.GlobeCamera.prototype.constructor = THREE.GlobeCamera
 

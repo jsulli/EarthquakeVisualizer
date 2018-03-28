@@ -1,6 +1,6 @@
-
 var quakeList
 console.log("creating UI")
+
 function QuakeList() {
 
     this.buttonList = []
@@ -22,9 +22,9 @@ function QuakeList() {
         var _this = this
         sortTime.click(function() {
 
-            if(!_this.sortByTime) {
+            if (!_this.sortByTime) {
                 _this.sortByTime = true
-                sortTime.addClass("active").siblings().removeClass("active");
+                sortTime.addClass("active").siblings().removeClass("active")
                 quakes.clearQuakes()
                 quakes.sortByTime()
                 quakes.buildList()
@@ -32,9 +32,9 @@ function QuakeList() {
         })
         var sortMag = $('#sort-mag')
         sortMag.click(function() {
-            if(_this.sortByTime) {
+            if (_this.sortByTime) {
                 _this.sortByTime = false
-                sortMag.addClass("active").siblings().removeClass("active");
+                sortMag.addClass("active").siblings().removeClass("active")
                 quakes.clearQuakes()
                 quakes.sortByMagnitude()
                 quakes.buildList()
@@ -43,7 +43,7 @@ function QuakeList() {
     }
 
     this.setData = function(json) {
-        for(var i = 0; i < json.length; i++) {
+        for (var i = 0; i < json.length; i++) {
             var quake = json[i].properties
             var card = document.getElementById('card-base'),
                 clone = card.cloneNode(true)
@@ -51,7 +51,7 @@ function QuakeList() {
             clone.style.display = "flex"
             var button = clone.querySelector('#header-button')
             button.id = "quake" + i + "-button"
-            button.setAttribute("data-target", "#quakeCollapse" + i);
+            button.setAttribute("data-target", "#quakeCollapse" + i)
             button.innerHTML = quake.title
             this.createClickListener(button, i)
 
@@ -77,7 +77,8 @@ function QuakeList() {
             month: 'long',
             day: 'numeric',
             hour: 'numeric',
-            minute: 'numeric' }
+            minute: 'numeric'
+        }
         var date = new Date(0)
         date.setUTCMilliseconds(props.time)
         var dateOffset = new Date(0)
@@ -86,7 +87,7 @@ function QuakeList() {
         var dateFormat = date.toLocaleDateString("en-US", timeOptions)
 
         var felt
-        if(props.felt == null) felt = "No reports"
+        if (props.felt == null) felt = "No reports"
         else felt = props.felt + " reports"
 
         info += "Location: " + props.place + escape
@@ -115,10 +116,11 @@ function QuakeList() {
 
     this.clearList = function() {
         var container = document.getElementById('quake-list')
-        while(container.firstChild) {
+        while (container.firstChild) {
             container.removeChild(container.firstChild)
         }
         this.buttonList = []
     }
 }
-QuakeList.prototype.constructor = QuakeList;
+
+QuakeList.prototype.constructor = QuakeList

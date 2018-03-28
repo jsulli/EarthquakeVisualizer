@@ -1,4 +1,3 @@
-
 function Quakes(path) {
     var _this = this
     this.markers = []
@@ -15,14 +14,14 @@ function Quakes(path) {
 
     this.init = function(data) {
         this.data = data
-        ObjectLoader('./assets/models/pin.obj', function(obj) {
+        ObjLoader.load('./assets/models/pin.obj', function(obj) {
             _this.markerObj = new THREE.Mesh(obj.geometry, new THREE.MeshBasicMaterial())
             _this.markerObj.scale.x = 35
             _this.markerObj.scale.y = 35
             _this.markerObj.scale.z = 12
             _this.buildList()
         })
-        ObjectLoader('./assets/models/ping.obj', function(obj) {
+        ObjLoader.load('./assets/models/ping.obj', function(obj) {
             _this.ping = new THREE.Mesh(obj.geometry, materials.pingMat)
             _this.ping.scale.multiplyScalar(10)
             _this.ping.visible = false
@@ -64,14 +63,14 @@ function Quakes(path) {
     this.findNearest = function(pos) {
         var dist = 1000
         var nearestIndex
-        for(var i = 0; i < this.markers.length; i++) {
+        for (var i = 0; i < this.markers.length; i++) {
             var cur = this.markers[i].position.distanceTo(pos)
-            if(cur < dist) {
+            if (cur < dist) {
                 dist = cur
                 nearestIndex = i
             }
         }
-        if(dist < 7) {
+        if (dist < 7) {
             var target = this.markers[nearestIndex].position
             camera.moveToTarget(target)
             this.setPing(target)
@@ -113,4 +112,5 @@ function Quakes(path) {
 
 
 }
-Quakes.prototype.constructor = Quakes;
+
+Quakes.prototype.constructor = Quakes

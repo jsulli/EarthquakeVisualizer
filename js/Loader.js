@@ -1,12 +1,13 @@
+function ObjLoader() {
+}
 
-function ObjectLoader(path, onLoad) {
-
+ObjLoader.load = function(path, onLoad) {
     var loader = new THREE.OBJLoader()
 
     loader.load(path, function(object) {
         var obj
         object.traverse(function(child) {
-            if(child instanceof THREE.Mesh) {
+            if (child instanceof THREE.Mesh) {
                 obj = child
             }
         })
