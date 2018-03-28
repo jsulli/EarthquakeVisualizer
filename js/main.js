@@ -55,7 +55,7 @@ function init() {
     initSky()
     initGPS()
 
-    quakes = new Quakes("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson")
+    quakes = new Quakes("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson")
 }
 
 
@@ -90,7 +90,7 @@ function initObjects() {
 
 function initSky() {
     var p = "./assets/textures/sky/"
-    var images = ["xpos.png", "xneg.png", "ypos.png", "yneg.png", "zpos.png", "zneg.png"]
+    var images = ["xpos.jpg", "xneg.jpg", "ypos.jpg", "yneg.jpg", "zpos.jpg", "zneg.jpg"]
     sceneSky.background = new THREE.CubeTextureLoader().setPath(p).load(images)
 }
 
