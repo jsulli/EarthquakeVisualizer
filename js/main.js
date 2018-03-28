@@ -58,8 +58,9 @@ function init() {
     initGPS()
 
     quakeData = new QuakeData("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson", function() {
-        quakeList = new QuakeList()
         quakeMarkers = new QuakeMarkers()
+        quakeList = new QuakeList()
+        quakeList.init()
     })
 }
 

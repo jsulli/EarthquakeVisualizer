@@ -56,7 +56,7 @@ function QuakeMarkers() {
     }
 
 
-    this.clearQuakes = function() {
+    this.clearMarkers = function() {
         this.markers.forEach(function(marker) {
             scene.remove(marker)
         })

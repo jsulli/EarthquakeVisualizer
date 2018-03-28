@@ -30,6 +30,14 @@ function QuakeData(path, loadComplete) {
     }
 
 
+    this.clearAndRebuild = function() {
+        quakeMarkers.clearMarkers()
+        quakeList.clearList()
+        quakeMarkers.initMarkers()
+        quakeList.initList()
+    }
+
+
     /*
      * Builds content displayed when a quake is selected
      */

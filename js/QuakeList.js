@@ -30,9 +30,8 @@ function QuakeList() {
             if (!_this.sortByTime) {
                 _this.sortByTime = true
                 sortTime.addClass("active").siblings().removeClass("active")
-                quakeMarkers.clearQuakes()
-                quakeMarkers.sortByTime()
-                quakeMarkers.initMarkers()
+                quakeData.sortByTime()
+                quakeData.clearAndRebuild()
             }
         })
         var sortMag = $('#sort-mag')
@@ -40,11 +39,11 @@ function QuakeList() {
             if (_this.sortByTime) {
                 _this.sortByTime = false
                 sortMag.addClass("active").siblings().removeClass("active")
-                quakeMarkers.clearQuakes()
-                quakeMarkers.sortByMagnitude()
-                quakeMarkers.initMarkers()
+                quakeData.sortByMagnitude()
+                quakeData.clearAndRebuild()
             }
         })
+        this.initList()
     }
 
     /*
@@ -84,8 +83,6 @@ function QuakeList() {
         // open sidebar when complete to reduce jank
         $('#sidebar').removeClass('sidebar-closed')
     }
-
-    this.initList()
 
 
     // Select item in list at index
