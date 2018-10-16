@@ -1,38 +1,36 @@
 import {ObjLoader} from "./ObjLoader"
 import {Mesh, MeshBasicMaterial} from "three"
 import {GeoSymbol} from "./GeoSpatialMap"
+import {GlobalCoordinates} from "./data/GlobalCoordinates"
 
 export class QuakeMarkers {
     
-    
-    markers = []
-    markerObj
-    ping
+    private markers = []
+    private markerObj
+    private ping
 
-    scene
-    camera
+    private scene
+    private camera
 
-    quakeData
-    quakeList
+    private quakeList
 
     constructor(quakeData, gpsSurface, scene, camera, materials) {
-        let _this = this
-        this.quakeData = quakeData
         this.scene = scene
         this.camera = camera
 
-        ObjLoader.load('./assets/models/pin.obj', function(obj) {
-            _this.markerObj = new Mesh(obj.geometry, new MeshBasicMaterial())
-            _this.markerObj.scale.x = 35
-            _this.markerObj.scale.y = 35
-            _this.markerObj.scale.z = 12
-            _this.initMarkers(quakeData, gpsSurface)
+        ObjLoader.load('./assets/models/pin.obj', (obj) => {
+            console.log("finished loading marker")
+            this.markerObj = new Mesh(obj.geometry, new MeshBasicMaterial())
+            this.markerObj.scale.x = 35
+            this.markerObj.scale.y = 35
+            this.markerObj.scale.z = 12
+            this.initMarkers(quakeData, gpsSurface)
         })
-        ObjLoader.load('./assets/models/ping.obj', function(obj) {
-            _this.ping = new Mesh(obj.geometry, materials.pingMat)
-            _this.ping.scale.multiplyScalar(10)
-            _this.ping.visible = false
-            scene.add(_this.ping)
+        ObjLoader.load('./assets/models/ping.obj', (obj) => {
+            this.ping = new Mesh(obj.geometry, materials.pingMat)
+            this.ping.scale.multiplyScalar(10)
+            this.ping.visible = false
+            scene.add(this.ping)
         })
     }
 
@@ -50,10 +48,10 @@ export class QuakeMarkers {
 
 
     findNearest(pos) {
-        var dist = 1000
-        var nearestIndex
-        for (var i = 0; i < this.markers.length; i++) {
-            var cur = this.markers[i].position.distanceTo(pos)
+        let dist = 1000
+        let nearestIndex
+        for (let i = 0; i < this.markers.length; i++) {
+            let cur = this.markers[i].position.distanceTo(pos)
             if (cur < dist) {
                 dist = cur
                 nearestIndex = i
@@ -66,7 +64,7 @@ export class QuakeMarkers {
 
 
     selectIndex(index) {
-        var target = this.markers[index].position
+        let target = this.markers[index].position
         let pos = this.camera.moveToTarget(target)
         this.setPing(target)
         this.quakeList.activateIndex(index)
@@ -74,7 +72,6 @@ export class QuakeMarkers {
 
 
     initMarkers(quakeData, gpsSurface) {
-        console.log("there are " + quakeData.getQuakes().count + " quakes")
         quakeData.getQuakes().forEach((quake) => {
             this.createMarker(quake, gpsSurface)
         })
@@ -91,12 +88,12 @@ export class QuakeMarkers {
 
 
     createMarker(quake, gpsSurface) {
-        var marker = this.markerObj.clone()
+        let marker = this.markerObj.clone()
         gpsSurface.addGeoSymbol(
-            new GeoSymbol(marker, {
-                phi: quake.geometry.coordinates[1],
-                lambda: quake.geometry.coordinates[0]
-            })
+            new GeoSymbol(marker, new GlobalCoordinates(
+                quake.geometry.coordinates[1],
+                quake.geometry.coordinates[0]
+            ))
         )
         marker.lookAt(gpsSurface.position)
         marker.translateZ(0)

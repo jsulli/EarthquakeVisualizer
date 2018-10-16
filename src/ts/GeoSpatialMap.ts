@@ -1,4 +1,5 @@
 import {Mesh, Vector2, Vector3} from "three"
+import {GlobalCoordinates} from "./data/GlobalCoordinates"
 
 export class GeoSpatialMap extends Mesh {
 
@@ -34,19 +35,20 @@ export class GeoSpatialMap extends Mesh {
         return radianVector
     }
 
-    addGeoSymbol(geoSymbol) {
-        /*if(!(geoSymbol instanceof GeoSymbol)) {
-            console.warn("must provide an instance of GeoSymbol")
-            return
-        }*/
+    addGeoSymbol(geoSymbol: GeoSymbol) {
 
-        let phi = (90 - (geoSymbol.coordinates.phi)) * Math.PI / 180
-        let theta = (180 - (geoSymbol.coordinates.label - this.textureEdgeLongitude)) * Math.PI / 180
+        let phi = (90 - (geoSymbol.coordinates.lat)) * Math.PI / 180
+        let theta = (180 - (geoSymbol.coordinates.lon - this.textureEdgeLongitude)) * Math.PI / 180
+
+        console.log("phi and theta: " )
+        console.log(geoSymbol.coordinates.lat)
+        console.log(geoSymbol.coordinates.lon)
 
         geoSymbol.mesh.position.x = this.radius * Math.sin(phi) * Math.cos(theta)
         geoSymbol.mesh.position.y = this.radius * Math.cos(phi)
         geoSymbol.mesh.position.z = this.radius * Math.sin(phi) * Math.sin(theta)
-
+        console.log("adding geo symbol with position")
+        console.log(geoSymbol.mesh.position)
         this.add(geoSymbol.mesh)
     }
 
@@ -69,14 +71,11 @@ export class GeoSpatialMap extends Mesh {
 export class GeoSymbol {
 
     mesh
-    coordinates
+    coordinates: GlobalCoordinates
 
-    constructor(object, coordinates) {
+    constructor(object, coordinates: GlobalCoordinates) {
         this.mesh = object
-        this.coordinates = {
-            phi: coordinates.phi,
-            lambda: coordinates.lamda
-        }
+        this.coordinates = coordinates
     }
 
 }
