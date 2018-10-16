@@ -6,6 +6,7 @@ import {
     Vector2,
     Vector3
 } from "three"
+import {Util} from "./Util"
 
 export class GlobeCamera extends PerspectiveCamera {
 
@@ -22,7 +23,7 @@ export class GlobeCamera extends PerspectiveCamera {
 
     update() {
         if (this.idle) {
-            var x = this.position.x,
+            let x = this.position.x,
                 y = this.position.y,
                 z = this.position.z,
                 tx = this.controls.target.x,
@@ -42,7 +43,7 @@ export class GlobeCamera extends PerspectiveCamera {
     }
 
     setIdleSpeed(x, y) {
-        var _this = this
+        let _this = this
         if (y === undefined) y = x / 7
         new TWEEN.Tween(this.rotSpeed)
             .to({
@@ -59,12 +60,12 @@ export class GlobeCamera extends PerspectiveCamera {
     moveToTarget(pos) {
         this.idle = false
 
-        var height = 55
+        let height = 55
 
-        var handle1 = new Object3D
-        var handle2 = new Object3D
-        var start = new Object3D
-        var end = new Object3D
+        let handle1 = new Object3D
+        let handle2 = new Object3D
+        let start = new Object3D
+        let end = new Object3D
 
         start.position.set(this.position.x, this.position.y, this.position.z)
         end.position.set(pos.x, pos.y, pos.z)
@@ -80,28 +81,28 @@ export class GlobeCamera extends PerspectiveCamera {
         Util.lookAtAndOrient(handle1, origin, end)
         Util.lookAtAndOrient(handle2, origin, start)
 
-        var angle = Util.findAngle(start.position, origin, end.position)
+        let angle = Util.findAngle(start.position, origin, end.position)
         angle = angle * 60
         handle1.translateX(angle)
         handle2.translateX(angle)
 
-        var curve = new CubicBezierCurve3(
+        let curve = new CubicBezierCurve3(
             start.position,
             handle1.position,
             handle2.position,
             end.position)
 
-        var time = start.position.distanceTo(end.position) * 8
+        let time = start.position.distanceTo(end.position) * 8
         if (time < 2000) time = 2000
         if (time > 6000) time = 6000
 
-        var _this = this
+        let _this = this
 
         this.cameraTween = new TWEEN.Tween({x: 0.00})
             .to({x: 1.00}, time)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(function() {
-                var point = curve.getPointAt(this.x)
+                let point = curve.getPointAt(this.x)
                 _this.position.x = point.x
                 _this.position.y = point.y
                 _this.position.z = point.z
@@ -110,11 +111,11 @@ export class GlobeCamera extends PerspectiveCamera {
 
     smoothZoom(amount, onComplete) {
         onComplete = onComplete || function() {}
-        var speed = 3000
-        var dist = this.position.distanceTo(this.origin)
-        var last = 0
+        let speed = 3000
+        let dist = this.position.distanceTo(this.origin)
+        let last = 0
 
-        var _this = this
+        let _this = this
         new TWEEN.Tween({z:0})
             .to({z:amount}, speed)
             .easing(TWEEN.Easing.Quadratic.InOut)

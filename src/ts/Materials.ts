@@ -11,16 +11,8 @@ import {ShaderLoader} from "./ShaderLoader"
 
 export class Materials {
 
-    camera
-    scene
-    start
-    globeMat: ShaderMaterial
-    nameGlowMat: ShaderMaterial
-
-    constructor(camera: Camera, scene: Scene) {
-        this.camera = camera
-        this.scene = scene
-    }
+    static globeMat: ShaderMaterial
+    static nameGlowMat: ShaderMaterial
 
     baseColor = new Color(0x4eebb3)
 
@@ -34,20 +26,30 @@ export class Materials {
         color: this.baseColor
     })
 
-    initGlow(callback) {
-        let _this = this
-        new ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", function(vert, frag) {
 
-            _this.nameGlowMat = new ShaderMaterial({
+    private camera
+    private scene
+    private startTime
+
+
+    constructor(camera: Camera, scene: Scene) {
+        this.camera = camera
+        this.scene = scene
+    }
+
+    initGlow(callback) {
+        new ShaderLoader("./assets/shaders/glow.vert", "./assets/shaders/glow.frag", (vert, frag) => {
+
+            Materials.nameGlowMat = new ShaderMaterial({
                 uniforms:
                     {
                         c: {type: "f", value: 1.3},
                         p: {type: "f", value: 1},
                         glowColor: {type: "c", value: new Color("#ffffff")},
-                        viewVector: {type: "v3", value: _this.camera.position},
-                        fogColor: {type: "c", value: _this.scene.fog.color},
-                        fogNear: {type: "f", value: _this.scene.fog.near},
-                        fogFar: {type: "f", value: _this.scene.fog.far}
+                        viewVector: {type: "v3", value: this.camera.position},
+                        fogColor: {type: "c", value: this.scene.fog.color},
+                        fogNear: {type: "f", value: this.scene.fog.near},
+                        fogFar: {type: "f", value: this.scene.fog.far}
                     },
                 vertexShader: vert,
                 fragmentShader: frag,
@@ -61,10 +63,9 @@ export class Materials {
     }
 
     initGlobe(callback) {
-        let _this = this
-        new ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", function(vert, frag) {
-            _this.start = Date.now()
-            _this.globeMat = new ShaderMaterial({
+        new ShaderLoader("./assets/shaders/globe.vert", "./assets/shaders/globe.frag", (vert, frag) => {
+            this.startTime = Date.now()
+            Materials.globeMat = new ShaderMaterial({
                 uniforms:
                     {
                         c: {type: "f", value: 0.05},
@@ -72,10 +73,10 @@ export class Materials {
                         time: {type: "f", value: 0.0},
                         reflectivity: {type: "f", value: 0.2},
                         glowColor: {type: "c", value: new Color(0x279989)},
-                        viewVector: {type: "v3", value: _this.camera.position},
-                        fogColor: {type: "c", value: _this.scene.fog.color},
-                        fogNear: {type: "f", value: _this.scene.fog.near},
-                        fogFar: {type: "f", value: _this.scene.fog.far}
+                        viewVector: {type: "v3", value: this.camera.position},
+                        fogColor: {type: "c", value: this.scene.fog.color},
+                        fogNear: {type: "f", value: this.scene.fog.near},
+                        fogFar: {type: "f", value: this.scene.fog.far}
                     },
                 vertexShader: vert,
                 fragmentShader: frag,
@@ -98,10 +99,10 @@ export class Materials {
     }
 
     update() {
-        if (this.globeMat === undefined) {
+        if (Materials.globeMat === undefined) {
             return
         }
-        var dist = this.camera.position.distanceTo(origin)
-        this.globeMat.uniforms.time.value = 0.00003 * (Date.now() - this.start)
+        let dist = this.camera.position.distanceTo(origin)
+        Materials.globeMat.uniforms.time.value = 0.00003 * (Date.now() - this.startTime)
     }
 }

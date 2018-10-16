@@ -36,7 +36,7 @@ module.exports = {
     mode: 'development',
     devtool: 'source-map',
     entry: [
-        './src/ts/main.ts'
+        './src/ts/index.ts'
     ],
     output: {
         path: __dirname + '/dist',

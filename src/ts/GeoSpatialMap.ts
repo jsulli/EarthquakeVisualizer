@@ -47,8 +47,6 @@ export class GeoSpatialMap extends Mesh {
         geoSymbol.mesh.position.y = this.radius * Math.cos(phi)
         geoSymbol.mesh.position.z = this.radius * Math.sin(phi) * Math.sin(theta)
 
-        console.log("creating geo symbol")
-
         this.add(geoSymbol.mesh)
     }
 

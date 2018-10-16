@@ -76,7 +76,6 @@ export class QuakeMarkers {
     initMarkers(quakeData, gpsSurface) {
         console.log("there are " + quakeData.getQuakes().count + " quakes")
         quakeData.getQuakes().forEach((quake) => {
-            console.log(quake)
             this.createMarker(quake, gpsSurface)
         })
     }
