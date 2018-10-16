@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Earthquake Visualizer</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+
+
+
+        <div id="container"></div>
+
+        <div class="card card-template" id="card-base">
+            <button id="header-button" type="button" class="btn btn-light quake-btn" data-toggle="collapse" data-target="#quake-base">
+                Collapsible Group Item #1
+            </button>
+
+            <div id="quake-body-base" class="collapse" data-parent="#quake-list">
+                <div id="quake-content-base" class="card-body card-content">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>
+
+
+        <div class="sidebar-toggle"></div>
+        <div id="sidebar" class="sidebar sidebar-closed">
+
+            <h2>Earthquake Visualizer<br></h2>
+
+            <p>Data gathered from the United States Geological Survey to display earthquakes over the past week around the globe.<br></p>
+
+            <h5>Recent quakes:</h5>
+            <div class="sort-container">
+
+                <h6>Sort:    </h6>
+                <div class="btn-group btn-group-toggle" data-toggle="sort">
+                    <label id="sort-time" class="btn btn-secondary btn-sm active">
+                        <input type="radio" name="options" autocomplete="off" checked> Recent
+                    </label>
+                    <label id="sort-mag" class="btn btn-secondary btn-sm">
+                        <input type="radio" name="options" autocomplete="off"> Magnitude
+                    </label>
+                </div>
+
+            </div>
+            <div id="quake-list">
+            </div>
+        </div>
+    </body>
+</html>

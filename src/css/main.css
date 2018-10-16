@@ -1,0 +1,85 @@
+
+
+.sidebar {
+    width: 400px;
+    height: 100%;
+    position: absolute;
+    background: #ffffff;
+    opacity: 0.8;
+    padding: 12px;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+    overflow-x: hidden;
+    -webkit-transition: all 1.2s ease-in;
+       -moz-transition: all 1.2s ease-in;
+        -ms-transition: all 1.2s ease-in;
+         -o-transition: all 1.2s ease-in;
+            transition: all 1.2s ease-in;
+    transition-delay: 2s;
+}
+
+.sidebar-closed {
+    left: -100%;
+}
+
+.sort-container {
+    position: relative;
+    display:-webkit-box;
+    display:-ms-flexbox;
+    display:flex;
+    margin-bottom: 12px;
+    -webkit-box-orient:horizontal;
+    -ms-flex-direction:row;
+    flex-direction:row;
+}
+
+.card-template {
+    display: none;
+}
+
+.card-content {
+    white-space: pre;
+}
+
+
+.quake-card {
+    position:relative;
+    display:-webkit-box;
+    display:-ms-flexbox;
+    display:flex;
+    -webkit-box-orient:vertical;
+    -webkit-box-direction:normal;
+    -ms-flex-direction:column;
+    flex-direction:column;
+    min-width:0;
+    word-wrap:break-word;
+    background-color:#fff;
+    background-clip:border-box;
+    border:1px solid rgba(0,0,0,.125);
+    border-radius:.25rem
+}
+
+.quake-btn {
+    font-size: 1em;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.quake-header {
+    padding:.25rem .75rem;
+    margin-bottom:0;
+    background-color:rgba(0,0,0,.03);
+    border-bottom:1px solid rgba(0,0,0,.125)
+}
+
+h5 {
+    font-size: 1.2em;
+}
+
+h6 {
+    padding-top: 5px;
+    padding-right: 8px;
+    vertical-align: middle;
+    font-size: 0.9em;
+}
