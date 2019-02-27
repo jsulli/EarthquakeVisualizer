@@ -1,14 +1,14 @@
-import {Vector3} from "three"
+import {Object3D, Vector3} from "three"
 
 export class Util {
     static lookAtAndOrient(
-        objectToAdjust,
-        pointToLookAt,
-        pointToOrientXTowards) {
+        objectToAdjust: Object3D,
+        pointToLookAt: Vector3,
+        pointToOrientXTowards: Object3D) {
 
-        var v1 = pointToOrientXTowards.position.clone().sub(objectToAdjust.position).normalize()
-        var v2 = pointToLookAt.clone().sub(objectToAdjust.position).normalize()
-        var v3 = new Vector3().crossVectors(v2, v1).normalize()
+        const v1 = pointToOrientXTowards.position.clone().sub(objectToAdjust.position).normalize()
+        const v2 = pointToLookAt.clone().sub(objectToAdjust.position).normalize()
+        const v3 = new Vector3().crossVectors(v2, v1).normalize()
         objectToAdjust.up.copy(v3)
 
         objectToAdjust.lookAt(pointToLookAt)

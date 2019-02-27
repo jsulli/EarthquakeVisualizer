@@ -7,6 +7,7 @@ import {
     Vector3
 } from "three"
 import {Util} from "./Util"
+import * as TWEEN from "@tweenjs/tween.js"
 
 export class GlobeCamera extends PerspectiveCamera {
 
@@ -43,7 +44,6 @@ export class GlobeCamera extends PerspectiveCamera {
     }
 
     setIdleSpeed(x, y) {
-        let _this = this
         if (y === undefined) y = x / 7
         new TWEEN.Tween(this.rotSpeed)
             .to({
@@ -51,8 +51,8 @@ export class GlobeCamera extends PerspectiveCamera {
                 y: y
             }, 3500)
             .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(function() {
-                _this.rotSpeed.set(this.x, this.y)
+            .onUpdate(() => {
+                this.rotSpeed.set(x, y)
             })
             .start()
     }
@@ -78,10 +78,10 @@ export class GlobeCamera extends PerspectiveCamera {
         handle1.position.set(start.position.x, start.position.y, start.position.z)
         handle2.position.set(end.position.x, end.position.y, end.position.z)
 
-        Util.lookAtAndOrient(handle1, origin, end)
-        Util.lookAtAndOrient(handle2, origin, start)
+        Util.lookAtAndOrient(handle1, this.origin, end)
+        Util.lookAtAndOrient(handle2, this.origin, start)
 
-        let angle = Util.findAngle(start.position, origin, end.position)
+        let angle = Util.findAngle(start.position, this.origin, end.position)
         angle = angle * 60
         handle1.translateX(angle)
         handle2.translateX(angle)
@@ -96,16 +96,15 @@ export class GlobeCamera extends PerspectiveCamera {
         if (time < 2000) time = 2000
         if (time > 6000) time = 6000
 
-        let _this = this
-
-        this.cameraTween = new TWEEN.Tween({x: 0.00})
+        let progress = { x: 0.00 }
+        this.cameraTween = new TWEEN.Tween(progress)
             .to({x: 1.00}, time)
             .easing(TWEEN.Easing.Quadratic.InOut)
-            .onUpdate(function() {
-                let point = curve.getPointAt(this.x)
-                _this.position.x = point.x
-                _this.position.y = point.y
-                _this.position.z = point.z
+            .onUpdate(() => {
+                let point = curve.getPointAt(progress.x)
+                this.position.x = point.x
+                this.position.y = point.y
+                this.position.z = point.z
             }).start()
     }
 

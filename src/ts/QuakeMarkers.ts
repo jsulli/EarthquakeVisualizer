@@ -1,5 +1,5 @@
 import {ObjLoader} from "./ObjLoader"
-import {Mesh, MeshBasicMaterial} from "three"
+import {Mesh, MeshBasicMaterial, Vector3} from "three"
 import {GeoSymbol} from "./GeoSpatialMap"
 import {GlobalCoordinates} from "./data/GlobalCoordinates"
 
@@ -11,6 +11,7 @@ export class QuakeMarkers {
 
     private scene
     private camera
+    private origin = new Vector3()
 
     private quakeList
 
@@ -42,7 +43,7 @@ export class QuakeMarkers {
 
     setPing(pos) {
         this.ping.position.set(pos.x, pos.y, pos.z)
-        this.ping.lookAt(origin)
+        this.ping.lookAt(this.origin)
         this.ping.visible = true
     }
 
@@ -64,6 +65,7 @@ export class QuakeMarkers {
 
 
     selectIndex(index) {
+        console.log("selected index");
         let target = this.markers[index].position
         let pos = this.camera.moveToTarget(target)
         this.setPing(target)

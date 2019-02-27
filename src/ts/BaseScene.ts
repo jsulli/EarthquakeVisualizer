@@ -5,7 +5,7 @@ import {
     WebGLRenderer
 } from "three"
 
-import * as TWEEN from "tween"
+import * as TWEEN from "@tweenjs/tween.js"
 import * as THREE from "three"
 (window as any).THREE = THREE;
 

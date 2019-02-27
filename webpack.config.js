@@ -1,4 +1,4 @@
-var path = require("path")
+const path = require("path")
 
 
 /* Configure HTMLWebpack plugin */
@@ -49,46 +49,12 @@ module.exports = {
                 use: 'awesome-typescript-loader'
             }, {
                 test: /\.css$/,
-                exclude: /[\/\\]src[\/\\]/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {loader: 'css-loader'}
-                ]
-            }, {
-                test: /\.css$/,
-                exclude: /[\/\\](node_modules|bower_components|public)[\/\\]/,
-                use: [
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            importLoaders: 1,
-                            localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
-                        }
-                    }
+                    "style-loader",
+                    "css-loader"
                 ]
             },
-            {
-                test: /\.(png|jpg|obj|frag|vert)$/,
-                use: [
-                    'file-loader'
-                ]
-            },
-            {
-                test: /three\/examples\/js/,
-                use: 'imports-loader?THREE=three'
-            }
+            { test: /\.(jpg|png|woff|woff2|eot|ttf|svg)$/, loader: require.resolve("file-loader") + '?limit=100000' }
         ]
     },
     resolve: {
